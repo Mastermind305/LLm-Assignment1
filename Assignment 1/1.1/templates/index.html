@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NLP Preprocessing Demo</title>
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  
+  <style>
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 1rem 0;
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    main {
+      flex: 1;
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    textarea {
+      resize: vertical;
+    }
+    pre {
+      background: #e9ecef;
+      padding: 1rem;
+      border-radius: 6px;
+      max-height: 350px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.9rem;
+    }
+    .btn-group {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #212529;
+    }
+  </style>
+  
+</head>
+<body>
+  <header>
+    NLP Preprocessing Basics Demo
+  </header>
+  
+  <main>
+    <div class="mb-3">
+      <label for="inputText" class="form-label section-title">Enter Text to Analyze</label>
+      <textarea
+        id="inputText"
+        class="form-control"
+        rows="6"
+        placeholder="Type or paste your text here..."
+      ></textarea>
+    </div>
+    
+    <div class="btn-group" role="group" aria-label="Actions">
+      <button class="btn btn-primary" onclick="analyzeText()">Preprocess Text</button>
+      <button class="btn btn-outline-secondary" onclick="compareStemLemma()">
+        Compare Lemmatization vs Stemming
+      </button>
+    </div>
+    
+    <div>
+      <h5 class="section-title">Processed Output</h5>
+      <pre id="output">Processed output will appear here...</pre>
+    </div>
+    
+    <div>
+      <h5 class="section-title">Lemmatization vs Stemming Comparison</h5>
+      <div id="comparison"></div>
+    </div>
+  </main>
+  
+  <!-- Bootstrap 5 JS Bundle with Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+  
+  <script>
+    async function analyzeText() {
+      const text = document.getElementById('inputText').value.trim();
+      if (!text) {
+        alert('Please enter some text to analyze.');
+        return;
+      }
+      clearResults();
+      try {
+        const response = await fetch('/preprocess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text }),
+        });
+        if (!response.ok) {
+          throw new Error('Server error: ' + response.status);
+        }
+        const data = await response.json();
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('output').textContent = 'Error: ' + err.message;
+      }
+    }
+
+    async function compareStemLemma() {
+      clearResults();
+      try {
+        const response = await fetch('/compare_lemmatization_stemming');
+        if (!response.ok) {
+          throw new Error('Server error: ' + response.status);
+        }
+        const data = await response.json();
+        let table = `
+          <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+              <tr><th>Word</th><th>Lemma</th><th>Stem</th></tr>
+            </thead>
+            <tbody>
+        `;
+        data.forEach(({ word, lemma, stem }) => {
+          table += `<tr><td>${word}</td><td>${lemma}</td><td>${stem}</td></tr>`;
+        });
+        table += '</tbody></table>';
+        document.getElementById('comparison').innerHTML = table;
+      } catch (err) {
+        document.getElementById('comparison').textContent = 'Error: ' + err.message;
+      }
+    }
+
+    function clearResults() {
+      document.getElementById('output').textContent = '';
+      document.getElementById('comparison').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
