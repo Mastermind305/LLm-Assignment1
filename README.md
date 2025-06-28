@@ -1,4 +1,8 @@
 # LLm-Assignment1
+
+
+
+
 NLP Assignments Repository
 
 This repository contains code and notebooks for various Natural Language Processing (NLP) assignments, including text preprocessing, word embeddings, and sequence-to-sequence models for text summarization.
@@ -33,6 +37,11 @@ Results
 
 
 
+Contributing
+
+
+
+License
 
 Overview
 
@@ -82,6 +91,10 @@ Setup Instructions
 
 
 
+Clone the Repository:
+
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 
 
 
@@ -96,6 +109,11 @@ Install Dependencies:
 
 pip install flask spacy nltk tensorflow keras sklearn numpy pandas matplotlib seaborn scikit-learn rouge-score
 
+
+
+Download SpaCy Model:
+
+python -m spacy download en_core_web_sm
 
 
 
@@ -175,4 +193,11 @@ Assignment 1.2: Generates a 2D PCA plot of word embeddings and provides nearest 
 
 Assignment 1.3: Achieves a ROUGE-1 F1 score of ~0.107, ROUGE-L F1 of ~0.102, and BLEU score of ~0.015 on the validation set.
 
+Contributing
+
+Contributions are welcome! Please submit a pull request or open an issue for any improvements or bug fixes.
+
+License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
 
